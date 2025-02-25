@@ -19,6 +19,7 @@ export default function ReviewPage() {
     setPhone,
     setAdditionalInfo,
     setWantsSample,
+    selected
   } = useOrder();
 
   const [formData, setFormData] = useState({
@@ -36,7 +37,6 @@ export default function ReviewPage() {
       [name]: value
     }));
   };
-
   const selections = [
     {
       icon: FaCoffee,
@@ -45,8 +45,8 @@ export default function ReviewPage() {
     },
     {
       icon: FaMapMarkerAlt,
-      label: 'GH',
-      value: 'gh'
+      label: selected || '', // Dynamically set the region
+      value: ''
     },
     {
       icon: BiCoffeeTogo,
@@ -105,11 +105,6 @@ export default function ReviewPage() {
                     {item.label}
                   </span>
                 )}
-              </div>
-              <div className="w-16 text-center">
-                <span className="text-[#1D4045] underline cursor-pointer">
-                  Edit
-                </span>
               </div>
             </div>
           </div>
@@ -186,8 +181,6 @@ export default function ReviewPage() {
               </p>
             </div>
           </div>
-
-          <span className="text-[#1D4045] underline cursor-pointer">Edit</span>
         </div>
 
         {/* Additional Info Section */}

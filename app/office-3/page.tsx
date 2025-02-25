@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProgressBar from "../components/ProgressBar";
+import { useOrder } from "../context/OrderContext";
 
 function Office3Component() {
   // State management
@@ -14,6 +15,7 @@ function Office3Component() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { setSelected } = useOrder();
 
   // Get company name from URL params
   useEffect(() => {
@@ -66,11 +68,11 @@ function Office3Component() {
       // Simulate API call or data processing
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Store region in localStorage for persistence
-      localStorage.setItem('selectedRegion', region);
+      // Store region in context for persistence
+      setSelected(region);
 
       // Navigate to next page with smooth transition
-      router.push('../office-4');
+      router.push(`/office-4?companyName=${encodeURIComponent(companyName)}`);
     } catch (err) {
       console.error("Error in handleNext:", err); 
       setError('An error occurred. Please try again.');

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { FaBuilding, FaStore } from "react-icons/fa";
 import { useOrder } from "../context/OrderContext";
 import ProgressBar from "../components/ProgressBar";
+import Link from "next/link";
 
 export default function StepOne() {
   const router = useRouter();
@@ -54,7 +55,9 @@ export default function StepOne() {
       
       {/* Alternative Option */}
       <div className="mt-6">
-        <a href="#" className="text-sm text-gray-800 underline font-medium">Looking for something else ?</a>
+        <Link href="/form">
+          <p className="text-sm text-gray-800 underline font-medium">Looking for something else?</p>
+        </Link>
       </div>
       
       {/* Next Button */}

@@ -27,10 +27,6 @@ function CoffeeSelectionComponent() {
     }
   }, [searchParams]);
 
-  const handleCompanyNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCompanyName(e.target.value);
-  };
-
   const handleOptionClick = (option: string) => {
     setSelectedOptions(prev => {
       // If already selected, remove it; otherwise add it
@@ -68,16 +64,7 @@ function CoffeeSelectionComponent() {
         </div>
 
         <main className="py-16 flex flex-col items-center justify-center w-full">
-          <div className="text-center mb-10">
-            <h3 className="text-sm font-semibold text-gray-700">BUSINESS NAME</h3>
-            <input
-              type="text"
-              placeholder="Enter your company name..."
-              value={companyName}
-              onChange={handleCompanyNameChange}
-              className="mt-2 border-b-2 border-gray-400 outline-none text-center w-full max-w-xs p-2"
-            />
-          </div>
+    
 
           <h1 className="mb-12 text-4xl font-bold text-center text-[#1b353b]">
             How do you serve your coffee at <span className="text-[#4b9eab]">{companyName || 'Your Business'}</span> ?
