@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { FaCoffee, FaMapMarkerAlt, FaCheck } from "react-icons/fa";
 import { BiCoffeeTogo } from "react-icons/bi";
-import { useRouter,useSearchParams  } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 import { useOrder } from '../context/OrderContext';
 
-export default function ReviewPage() {
+function ReviewContent() {
   const {
     fullName,
     email,
@@ -220,5 +220,13 @@ export default function ReviewPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function ReviewPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ReviewContent />
+    </Suspense>
   );
 }

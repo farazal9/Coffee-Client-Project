@@ -1,9 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 
-export default function Page() {
+function FeedbackForm() {
   const searchParams = useSearchParams();
   const selected = searchParams.get("selected");
   const router = useRouter();
@@ -36,5 +36,13 @@ export default function Page() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FeedbackForm />
+    </Suspense>
   );
 }

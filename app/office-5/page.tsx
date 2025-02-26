@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 
@@ -11,7 +11,7 @@ const options = [
   { id: 'just-coffee', label: 'JUST COFFEE' },
 ];
 
-export default function Step5() {
+function Step5Content() {
   const searchParams = useSearchParams();
   const [companyName, setCompanyName] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
@@ -33,7 +33,6 @@ export default function Step5() {
       setCompanyName(companyNameFromParams);
     }
   }, [searchParams]);
-
 
   return (
     <div>
@@ -66,5 +65,13 @@ export default function Step5() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Step5() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Step5Content />
+    </Suspense>
   );
 }

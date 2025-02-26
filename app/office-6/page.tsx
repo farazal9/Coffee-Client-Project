@@ -1,6 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 import { useOrder } from "../context/OrderContext";
 
@@ -10,10 +10,10 @@ interface FormData {
   phone: string
 }
 
-export default function Page() {
+function PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-const selected = searchParams.get("selected");
+  const selected = searchParams.get("selected");
   const { fullName, email, phone, setFullName, setEmail, setPhone } = useOrder();
   
   // Initialize form state with context values
@@ -148,4 +148,12 @@ const selected = searchParams.get("selected");
     </div>
    </div>
   )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PageContent />
+    </Suspense>
+  );
 }
