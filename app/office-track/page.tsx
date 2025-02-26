@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaCoffee, FaMapMarkerAlt, FaCheck } from "react-icons/fa";
 import { BiCoffeeTogo } from "react-icons/bi";
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams  } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 import { useOrder } from '../context/OrderContext';
 
@@ -19,7 +19,9 @@ export default function ReviewPage() {
     setPhone,
     setAdditionalInfo,
     setWantsSample,
-    selected
+    selected,
+    selectedCoffee,
+    companyName
   } = useOrder();
 
   const [formData, setFormData] = useState({
@@ -45,15 +47,16 @@ export default function ReviewPage() {
     },
     {
       icon: FaMapMarkerAlt,
-      label: selected || '', // Dynamically set the region
+      label: selected || 'Select Region', // Default value if not selected
       value: ''
     },
     {
       icon: BiCoffeeTogo,
-      label: ['TRADITIONAL ESPRESSO MACHINE', 'THROUGH A BEAN TO CUP MACHINE'],
-      value: 'machine'
+      label: selectedCoffee ? [selectedCoffee] : ['Select Coffee'], // Default value
+      value: ''
     }
   ];
+  
 
   const router = useRouter();
   const handleNext = () => {
@@ -69,6 +72,10 @@ export default function ReviewPage() {
     setWantsSample(formData.wantsSample); // Set wantsSample in context
   }, [formData, setFullName, setEmail, setPhone, setAdditionalInfo, setWantsSample]);
 
+  const searchParams = useSearchParams();
+  const selectedOptions = searchParams.get("selected")?.split(",") || [];
+
+  const feedback = searchParams.get("feedback") || "";
   return (
     <div className="container-fluid px-0">
       <ProgressBar step={5} />
@@ -77,7 +84,7 @@ export default function ReviewPage() {
         <div className="mx-1 flex items-center justify-between">
           <div className="px-0 text-center flex-1">
             <h2 className="font-['Noe_Display'] text-[26px] leading-[40px] text-[#4F9CA9] font-bold m-0">
-              Faraz ali
+       { companyName}
             </h2>
           </div>
           <div className="w-[24px]"></div>
@@ -160,47 +167,33 @@ export default function ReviewPage() {
             </div>
           </form>
         </div>
-
-        {/* Your Needs Section */}
         <div className="max-w-lg mx-auto mb-12 mt-16 px-0 text-center">
-          <h3 className="text-center font-['Apercu'] text-[26px] leading-[21px] text-[#1D4045] font-[900] mb-12 pb-2 border-b border-[#1D4045] inline-block">
-            Your Needs
-          </h3>
+      <h3 className="text-center font-['Apercu'] text-[26px] leading-[21px] text-[#1D4045] font-[900] mb-12 pb-2 border-b border-[#1D4045] inline-block">
+        Your Needs
+      </h3>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-6">
-            <div className="w-full md:w-[calc(50%-1rem)] bg-[#1D4045] rounded py-4 px-6 border border-white">
-              <p className="font-['Apercu'] text-[18px] leading-[21px] text-white mb-0 flex items-center justify-center">
-                <FaCheck className="w-5 h-5 mr-3" />
-                Coffee Advice
-              </p>
-            </div>
-            <div className="w-full md:w-[calc(50%-1rem)] bg-[#1D4045] rounded py-4 px-6 border border-white">
-              <p className="font-['Apercu'] text-[18px] leading-[21px] text-white mb-0 flex items-center justify-center">
-                <FaCheck className="w-5 h-5 mr-3" />
-                Overall Guidance
-              </p>
-            </div>
+      <div className="flex flex-wrap gap-4 justify-center mb-6">
+        {selectedOptions.map((option) => (
+          <div key={option} className="w-full md:w-[calc(50%-1rem)] bg-[#1D4045] rounded py-4 px-6 border border-white">
+            <p className="font-['Apercu'] text-[18px] leading-[21px] text-white mb-0 flex items-center justify-center">
+              <FaCheck className="w-5 h-5 mr-3" />
+              {option.replace("-", " ")} 
+            </p>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
 
-        {/* Additional Info Section */}
-        <div className="max-w-lg mx-auto mb-12 mt-16 px-0 flex flex-col items-center">
-          <h3 className="text-center font-['Apercu'] text-[26px] leading-[21px] text-[#1D4045] font-[900] mb-12 pb-2 border-b border-[#1D4045]">
-            Additional Info
-          </h3>
+    {/* Feedback Section */}
+    <div className="max-w-lg mx-auto mb-12 mt-16 px-0 flex flex-col items-center">
+      <h3 className="text-center font-['Apercu'] text-[26px] leading-[21px] text-[#1D4045] font-[900] mb-12 pb-2 border-b border-[#1D4045]">
+        Additional Info
+      </h3>
 
-          <form className="w-full">
-            <div className="text-center">
-              <textarea
-                name="additionalInfo"
-                value={formData.additionalInfo}
-                onChange={handleInputChange}
-                className="w-full p-4 border border-[#1D4045] rounded focus:outline-none font-['Apercu'] text-[16px] text-black min-h-[200px]"
-                maxLength={750}
-              />
-            </div>
-          </form>
-        </div>
+      <div className="w-full p-4 border border-[#1D4045] rounded font-['Apercu'] text-[16px] text-black min-h-[200px] bg-gray-100">
+        {feedback ? feedback : "No additional information provided."}
+      </div>
+    </div>
 
         {/* Free Sample Checkbox */}
         <div className="max-w-lg mx-auto my-8">

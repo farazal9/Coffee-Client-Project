@@ -4,11 +4,12 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import ProgressBar from "../components/ProgressBar";
+import { useOrder } from '../context/OrderContext';
 
 function CoffeeSelectionComponent() {
   // State management
-  const [companyName, setCompanyName] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const { companyName, setCompanyName, selectedCoffee, setSelectedCoffee } = useOrder();
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedCoffee ? selectedCoffee.split(',') : []);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -25,7 +26,7 @@ function CoffeeSelectionComponent() {
     if (companyNameFromParams) {
       setCompanyName(companyNameFromParams);
     }
-  }, [searchParams]);
+  }, [searchParams, setCompanyName]);
 
   const handleOptionClick = (option: string) => {
     setSelectedOptions(prev => {
@@ -40,6 +41,7 @@ function CoffeeSelectionComponent() {
 
   const handleNext = () => {
     if (companyName && selectedOptions.length > 0) {
+      setSelectedCoffee(selectedOptions.join(','));
       const params = new URLSearchParams();
       params.append('companyName', companyName);
       selectedOptions.forEach(option => params.append('option', option));
@@ -64,8 +66,6 @@ function CoffeeSelectionComponent() {
         </div>
 
         <main className="py-16 flex flex-col items-center justify-center w-full">
-    
-
           <h1 className="mb-12 text-4xl font-bold text-center text-[#1b353b]">
             How do you serve your coffee at <span className="text-[#4b9eab]">{companyName || 'Your Business'}</span> ?
           </h1>

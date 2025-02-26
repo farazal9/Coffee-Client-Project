@@ -1,19 +1,22 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const selected = searchParams.get("selected");
   const router = useRouter();
-  const [feedback, setFeedback] = useState('')
+  const [feedback, setFeedback] = useState('');
+
   const handleNext = () => {
-    router.push("/office-track")
-  }
+    router.push(`/office-track?selected=${selected}&feedback=${encodeURIComponent(feedback)}`);
+  };
+
   return (
     <div>
       <ProgressBar step={4} />
       <div className="max-w-2xl mx-auto p-8 space-y-8">
-
         <h1 className="text-3xl font-bold text-center text-[#1D4045]">
           Anything else we should know?
         </h1>
@@ -27,12 +30,11 @@ export default function Page() {
 
         <button
           onClick={handleNext}
-
           className="w-full p-4 bg-[#1D4045] text-white hover:opacity-90 transition-opacity"
         >
           NEXT
         </button>
       </div>
     </div>
-  )
+  );
 }

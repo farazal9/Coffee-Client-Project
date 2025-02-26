@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import ProgressBar from "../components/ProgressBar";
 import { useOrder } from "../context/OrderContext";
 
@@ -12,6 +12,8 @@ interface FormData {
 
 export default function Page() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+const selected = searchParams.get("selected");
   const { fullName, email, phone, setFullName, setEmail, setPhone } = useOrder();
   
   // Initialize form state with context values
@@ -66,8 +68,8 @@ export default function Page() {
   }, [formData, setFullName, setEmail, setPhone]);
 
   const handleNext = () => {
-    router.push("/office-7")
-  }
+    router.push(`/office-7?selected=${selected}`);
+  };
 
   return (
    <div>
